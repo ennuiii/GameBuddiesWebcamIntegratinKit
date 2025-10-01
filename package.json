@@ -1,0 +1,39 @@
+{
+  "name": "ddf-webcam-integration-kit",
+  "version": "1.0.0",
+  "description": "Complete WebRTC video chat system with AI enhancements - extracted from DDF Quiz Game",
+  "main": "src/contexts/WebRTCContext.tsx",
+  "keywords": [
+    "webrtc",
+    "video-chat",
+    "react",
+    "mediapipe",
+    "virtual-background",
+    "face-tracking",
+    "noise-suppression"
+  ],
+  "author": "DDF Team",
+  "license": "MIT",
+  "dependencies": {
+    "@mediapipe/tasks-vision": "^0.10.15",
+    "socket.io-client": "^4.7.0",
+    "three": "^0.160.0",
+    "lucide-react": "^0.300.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "zustand": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@types/three": "^0.160.0",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "scripts": {
+    "info": "echo 'This is a kit to be copied into your project. See README.md for installation instructions.'"
+  }
+}

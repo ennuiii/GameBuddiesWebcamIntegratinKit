@@ -1,0 +1,883 @@
+/**
+ * Webcam Integration Kit - Plain CSS (No Tailwind)
+ *
+ * This CSS file provides the same styles as webcam.css but without Tailwind dependencies.
+ * Use this if your project doesn't use Tailwind CSS.
+ *
+ * Import this file in your main CSS/SCSS file or component.
+ */
+
+/* ============================================
+   CSS Variables (Customizable Theme)
+   ============================================ */
+
+:root {
+  --webcam-primary: #3b82f6;
+  --webcam-success: #10b981;
+  --webcam-warning: #f59e0b;
+  --webcam-danger: #ef4444;
+  --webcam-bg-dark: #0f172a;
+  --webcam-bg-medium: #1e293b;
+  --webcam-bg-light: #334155;
+  --webcam-border: #475569;
+  --webcam-text-primary: #e2e8f0;
+  --webcam-text-secondary: #94a3b8;
+  --webcam-text-muted: #64748b;
+  --webcam-radius: 0.75rem;
+  --webcam-radius-sm: 0.5rem;
+  --webcam-radius-lg: 1rem;
+  --webcam-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --webcam-shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+/* ============================================
+   Core Container Styles
+   ============================================ */
+
+.webcam-display {
+  position: relative;
+}
+
+.webcam-container {
+  background-color: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(12px);
+  border-radius: var(--webcam-radius-lg);
+  padding: 1rem;
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  box-shadow: var(--webcam-shadow-lg);
+}
+
+.webcam-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(71, 85, 105, 0.5);
+  padding-bottom: 0.75rem;
+}
+
+.webcam-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--webcam-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.webcam-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ============================================
+   Video Grid Layouts
+   ============================================ */
+
+.webcam-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.webcam-grid-1 {
+  grid-template-columns: 1fr;
+}
+
+.webcam-grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.webcam-grid-3 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.webcam-grid-4 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.webcam-grid-5plus {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 1024px) {
+  .webcam-grid-3,
+  .webcam-grid-5plus {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.webcam-mobile-grid {
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+.webcam-grid-compact {
+  gap: 0.5rem;
+}
+
+.webcam-grid-expanded {
+  gap: 1rem;
+}
+
+/* ============================================
+   Video Feed Styles
+   ============================================ */
+
+.webcam-feed {
+  position: relative;
+  background-color: var(--webcam-bg-medium);
+  border-radius: var(--webcam-radius);
+  overflow: hidden;
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  box-shadow: var(--webcam-shadow);
+  transition: all 0.3s;
+  aspect-ratio: 16/9;
+}
+
+.webcam-feed-compact {
+  border-radius: var(--webcam-radius-sm);
+  aspect-ratio: 4/3;
+}
+
+.webcam-feed-expanded {
+  border-radius: var(--webcam-radius-lg);
+}
+
+.webcam-feed-active {
+  box-shadow: 0 0 0 2px var(--webcam-success), 0 0 20px rgba(16, 185, 129, 0.5);
+}
+
+.webcam-feed-answering {
+  box-shadow: 0 0 0 4px var(--webcam-warning), 0 0 30px rgba(245, 158, 11, 0.5);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.webcam-feed-next {
+  box-shadow: 0 0 0 2px #a855f7, 0 0 20px rgba(168, 85, 247, 0.5);
+}
+
+.webcam-feed-inactive {
+  opacity: 0.5;
+  filter: grayscale(100%);
+}
+
+.webcam-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.webcam-video-mirrored {
+  transform: scaleX(-1);
+}
+
+.webcam-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom right, var(--webcam-bg-medium), var(--webcam-bg-dark));
+}
+
+.webcam-placeholder-icon {
+  color: var(--webcam-text-muted);
+  opacity: 0.5;
+}
+
+.webcam-camera-off {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(12px);
+}
+
+.webcam-camera-off-icon {
+  color: var(--webcam-text-secondary);
+}
+
+/* ============================================
+   Player Info Overlay
+   ============================================ */
+
+.webcam-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.webcam-player-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  padding: 0.75rem;
+  pointer-events: auto;
+}
+
+.webcam-player-name {
+  color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.webcam-player-name-compact {
+  font-size: 0.75rem;
+}
+
+.webcam-lives {
+  display: flex;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+}
+
+.webcam-heart {
+  transition: all 0.3s;
+}
+
+.webcam-heart-full {
+  fill: #ef4444;
+  color: #ef4444;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.webcam-heart-empty {
+  color: #4b5563;
+}
+
+/* ============================================
+   Status Indicators
+   ============================================ */
+
+.webcam-status {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.webcam-status-badge {
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--webcam-radius-sm);
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.webcam-status-mic-on {
+  color: var(--webcam-success);
+}
+
+.webcam-status-mic-off {
+  color: var(--webcam-danger);
+}
+
+.webcam-status-gamemaster {
+  color: var(--webcam-warning);
+}
+
+.webcam-turn-indicator {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background-color: rgba(245, 158, 11, 0.9);
+  color: black;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--webcam-radius-sm);
+  font-size: 0.75rem;
+  font-weight: 700;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.webcam-next-indicator {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background-color: rgba(168, 85, 247, 0.9);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--webcam-radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* ============================================
+   Control Buttons
+   ============================================ */
+
+.webcam-feed-controls {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  gap: 0.25rem;
+}
+
+.webcam-control-btn {
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px);
+  color: white;
+  padding: 0.375rem;
+  border-radius: var(--webcam-radius-sm);
+  transition: all 0.2s;
+  cursor: pointer;
+  border: none;
+}
+
+.webcam-control-btn:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+  transform: scale(1.1);
+}
+
+.webcam-control-btn-active {
+  background-color: var(--webcam-success);
+}
+
+.webcam-control-btn-active:hover {
+  background-color: #059669;
+}
+
+.webcam-control-btn-inactive {
+  background-color: var(--webcam-danger);
+}
+
+.webcam-control-btn-inactive:hover {
+  background-color: #dc2626;
+}
+
+.webcam-vote-btn {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  background-color: var(--webcam-primary);
+  color: white;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--webcam-radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.webcam-vote-btn:hover {
+  background-color: #2563eb;
+  transform: scale(1.05);
+  box-shadow: var(--webcam-shadow);
+}
+
+.webcam-vote-btn-voted {
+  background-color: var(--webcam-success);
+}
+
+.webcam-vote-btn-voted:hover {
+  background-color: #059669;
+}
+
+.webcam-vote-btn-disabled {
+  background-color: #4b5563;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* ============================================
+   Header Controls
+   ============================================ */
+
+.webcam-header-btn {
+  background-color: var(--webcam-bg-light);
+  color: white;
+  padding: 0.5rem;
+  border-radius: var(--webcam-radius);
+  transition: all 0.2s;
+  cursor: pointer;
+  border: none;
+}
+
+.webcam-header-btn:hover {
+  background-color: var(--webcam-border);
+  transform: scale(1.05);
+}
+
+.webcam-header-btn-active {
+  background-color: var(--webcam-success);
+}
+
+.webcam-header-btn-active:hover {
+  background-color: #059669;
+}
+
+.webcam-header-btn-compact {
+  padding: 0.375rem;
+}
+
+/* ============================================
+   Settings Modal (Prepare Video Chat)
+   ============================================ */
+
+.webcam-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(12px);
+  z-index: 9998;
+}
+
+.webcam-modal {
+  position: fixed;
+  top: 5%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background-color: rgba(30, 41, 59, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  border-radius: var(--webcam-radius-lg);
+  box-shadow: var(--webcam-shadow-lg);
+  width: 90vw;
+  max-width: 600px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  z-index: 2147483647;
+  isolation: isolate;
+  pointer-events: auto;
+}
+
+.webcam-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(71, 85, 105, 0.5);
+  flex-shrink: 0;
+}
+
+.webcam-modal-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--webcam-text-primary);
+  display: flex;
+  align-items: center;
+}
+
+.webcam-modal-close {
+  color: var(--webcam-text-secondary);
+  transition: color 0.2s;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0.25rem;
+  border-radius: 9999px;
+}
+
+.webcam-modal-close:hover {
+  color: var(--webcam-text-primary);
+  background-color: rgba(51, 65, 85, 0.5);
+}
+
+.webcam-modal-body {
+  padding: 1.5rem;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.webcam-modal-preview {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(71, 85, 105, 0.5);
+  flex-shrink: 0;
+}
+
+.webcam-modal-preview-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--webcam-text-primary);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+}
+
+.webcam-modal-preview-container {
+  display: flex;
+  justify-content: center;
+}
+
+.webcam-modal-preview-video-wrapper {
+  position: relative;
+  background-color: #111827;
+  border-radius: var(--webcam-radius-lg);
+  overflow: hidden;
+  border: 2px solid rgba(71, 85, 105, 0.5);
+  aspect-ratio: 16/9;
+  width: 320px;
+}
+
+.webcam-modal-preview-badge {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0.5rem;
+  background-color: rgba(37, 99, 235, 0.8);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.webcam-modal-preview-info {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background-color: rgba(30, 58, 138, 0.3);
+  border: 1px solid rgba(96, 165, 250, 0.5);
+  border-radius: var(--webcam-radius);
+}
+
+.webcam-modal-preview-info-text {
+  color: #bfdbfe;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.webcam-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border-top: 1px solid rgba(71, 85, 105, 0.5);
+  flex-shrink: 0;
+}
+
+.webcam-modal-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(71, 85, 105, 0.5);
+}
+
+.webcam-modal-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.2s;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  background: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  color: var(--webcam-text-secondary);
+}
+
+.webcam-modal-tab:hover {
+  color: var(--webcam-text-primary);
+}
+
+.webcam-modal-tab-active {
+  color: var(--webcam-primary);
+  border-bottom: 2px solid var(--webcam-primary);
+}
+
+.webcam-modal-tab-inactive {
+  color: var(--webcam-text-secondary);
+}
+
+.webcam-modal-button-primary {
+  padding: 0.5rem 1.5rem;
+  background-color: var(--webcam-primary);
+  color: white;
+  border-radius: var(--webcam-radius);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.webcam-modal-button-primary:hover {
+  background-color: #2563eb;
+}
+
+.webcam-modal-button-secondary {
+  padding: 0.5rem 1.5rem;
+  background-color: var(--webcam-bg-light);
+  color: white;
+  border-radius: var(--webcam-radius);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.webcam-modal-button-secondary:hover {
+  background-color: #475569;
+}
+
+/* ============================================
+   Form Elements
+   ============================================ */
+
+.webcam-form-group {
+  margin-bottom: 1rem;
+}
+
+.webcam-form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--webcam-text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.webcam-form-select,
+.webcam-form-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background-color: var(--webcam-bg-light);
+  border: 1px solid var(--webcam-border);
+  border-radius: var(--webcam-radius);
+  color: var(--webcam-text-primary);
+}
+
+.webcam-form-select:focus,
+.webcam-form-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--webcam-primary);
+  border-color: transparent;
+}
+
+.webcam-form-checkbox {
+  width: 1rem;
+  height: 1rem;
+  color: var(--webcam-primary);
+  background-color: var(--webcam-bg-light);
+  border: 1px solid var(--webcam-border);
+  border-radius: 0.25rem;
+}
+
+.webcam-form-slider {
+  width: 100%;
+  height: 0.5rem;
+  background-color: var(--webcam-bg-light);
+  border-radius: var(--webcam-radius);
+  appearance: none;
+  cursor: pointer;
+}
+
+.webcam-form-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  background-color: var(--webcam-primary);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.webcam-form-slider::-moz-range-thumb {
+  width: 1rem;
+  height: 1rem;
+  background-color: var(--webcam-primary);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+.webcam-form-help {
+  font-size: 0.75rem;
+  color: var(--webcam-text-muted);
+  margin-top: 0.25rem;
+}
+
+/* ============================================
+   Background & Avatar Grids
+   ============================================ */
+
+.webcam-background-grid,
+.webcam-avatar-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.webcam-background-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.webcam-avatar-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (min-width: 768px) {
+  .webcam-background-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .webcam-avatar-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.webcam-background-option,
+.webcam-avatar-option {
+  position: relative;
+  cursor: pointer;
+  border-radius: var(--webcam-radius);
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.webcam-background-option {
+  aspect-ratio: 16/9;
+}
+
+.webcam-avatar-option {
+  background-color: var(--webcam-bg-light);
+  padding: 0.75rem;
+  aspect-ratio: 1;
+}
+
+.webcam-background-option:hover,
+.webcam-avatar-option:hover {
+  border-color: var(--webcam-primary);
+}
+
+.webcam-background-option-active,
+.webcam-avatar-option-active {
+  border-color: var(--webcam-primary);
+  box-shadow: 0 0 0 2px var(--webcam-primary);
+}
+
+.webcam-background-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.webcam-avatar-icon {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--webcam-text-secondary);
+}
+
+.webcam-background-label,
+.webcam-avatar-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  text-align: center;
+}
+
+/* ============================================
+   Status/Info Boxes
+   ============================================ */
+
+.webcam-info-box {
+  background-color: rgba(30, 58, 138, 0.3);
+  border: 1px solid rgba(96, 165, 250, 0.5);
+  border-radius: var(--webcam-radius);
+  padding: 0.75rem;
+}
+
+.webcam-info-box-text {
+  color: #bfdbfe;
+  font-size: 0.875rem;
+}
+
+.webcam-success-box {
+  background-color: rgba(6, 78, 59, 0.3);
+  border: 1px solid rgba(52, 211, 153, 0.5);
+  border-radius: var(--webcam-radius);
+  padding: 0.75rem;
+}
+
+.webcam-success-box-text {
+  color: #a7f3d0;
+  font-size: 0.875rem;
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.webcam-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.webcam-slide-in {
+  animation: slideIn 0.3s ease-in-out;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+
+@media (max-width: 768px) {
+  .webcam-modal {
+    max-width: 100%;
+    margin: 1rem;
+  }
+
+  .webcam-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ============================================
+   Print
+   ============================================ */
+
+@media print {
+  .webcam-display,
+  .webcam-container,
+  .media-controls {
+    display: none !important;
+  }
+}

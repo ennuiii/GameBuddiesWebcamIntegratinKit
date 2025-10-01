@@ -1,0 +1,670 @@
+/**
+ * Webcam Integration Kit - Styles
+ *
+ * This CSS file contains all styles for the webcam components.
+ * It uses Tailwind CSS utility classes, but can be customized for any CSS framework.
+ *
+ * If not using Tailwind, you'll need to implement these utility classes
+ * or replace them with your own custom CSS.
+ */
+
+/* ============================================
+   Core Container Styles
+   ============================================ */
+
+.webcam-display {
+  @apply relative;
+}
+
+.webcam-container {
+  @apply bg-slate-900/95 backdrop-blur-sm rounded-xl p-4 border border-slate-700/50 shadow-2xl;
+}
+
+.webcam-header {
+  @apply flex items-center justify-between mb-3 border-b border-slate-700/50 pb-3;
+}
+
+.webcam-title {
+  @apply text-xl font-bold text-slate-200 flex items-center gap-2;
+}
+
+.webcam-controls {
+  @apply flex items-center gap-2;
+}
+
+/* ============================================
+   Video Grid Layouts
+   ============================================ */
+
+.webcam-grid {
+  @apply grid gap-3;
+}
+
+/* Grid layouts for different participant counts */
+.webcam-grid-1 {
+  @apply grid-cols-1;
+}
+
+.webcam-grid-2 {
+  @apply grid-cols-2;
+}
+
+.webcam-grid-3 {
+  @apply grid-cols-2 lg:grid-cols-3;
+}
+
+.webcam-grid-4 {
+  @apply grid-cols-2;
+}
+
+.webcam-grid-5plus {
+  @apply grid-cols-2 lg:grid-cols-3;
+}
+
+/* Mobile grid optimizations */
+.webcam-mobile-grid {
+  @apply grid-cols-1 gap-2;
+}
+
+/* Compact mode */
+.webcam-grid-compact {
+  @apply gap-2;
+}
+
+/* Expanded mode */
+.webcam-grid-expanded {
+  @apply gap-4;
+}
+
+/* ============================================
+   Video Feed Styles
+   ============================================ */
+
+.webcam-feed {
+  @apply relative bg-slate-800 rounded-lg overflow-hidden border border-slate-700/50 shadow-lg;
+  @apply transition-all duration-300;
+  aspect-ratio: 16/9;
+}
+
+.webcam-feed-compact {
+  @apply rounded-md;
+  aspect-ratio: 4/3;
+}
+
+.webcam-feed-expanded {
+  @apply rounded-xl;
+}
+
+/* Active player highlight */
+.webcam-feed-active {
+  @apply ring-2 ring-green-500 shadow-green-500/50;
+}
+
+/* Answering player highlight (yellow/gold) */
+.webcam-feed-answering {
+  @apply ring-4 ring-yellow-400 shadow-yellow-400/50 animate-pulse;
+}
+
+/* Next turn player highlight (purple) */
+.webcam-feed-next {
+  @apply ring-2 ring-purple-400 shadow-purple-400/50;
+}
+
+/* Inactive/eliminated player */
+.webcam-feed-inactive {
+  @apply opacity-50 grayscale;
+}
+
+/* Video element */
+.webcam-video {
+  @apply w-full h-full object-cover;
+}
+
+.webcam-video-mirrored {
+  @apply transform scale-x-[-1];
+}
+
+/* Video placeholder (no stream) */
+.webcam-placeholder {
+  @apply absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-800 to-slate-900;
+}
+
+.webcam-placeholder-icon {
+  @apply text-slate-600 opacity-50;
+}
+
+/* Camera off overlay */
+.webcam-camera-off {
+  @apply absolute inset-0 flex items-center justify-center bg-slate-900/90 backdrop-blur-sm;
+}
+
+.webcam-camera-off-icon {
+  @apply text-slate-400;
+}
+
+/* ============================================
+   Player Info Overlay
+   ============================================ */
+
+.webcam-overlay {
+  @apply absolute inset-0 pointer-events-none;
+}
+
+.webcam-player-info {
+  @apply absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3;
+  @apply pointer-events-auto;
+}
+
+.webcam-player-name {
+  @apply text-white font-semibold text-sm truncate;
+}
+
+.webcam-player-name-compact {
+  @apply text-xs;
+}
+
+/* Lives/Hearts Display */
+.webcam-lives {
+  @apply flex gap-1 mt-1;
+}
+
+.webcam-heart {
+  @apply transition-all duration-300;
+}
+
+.webcam-heart-full {
+  @apply fill-red-500 text-red-500 drop-shadow-md;
+}
+
+.webcam-heart-empty {
+  @apply text-gray-600;
+}
+
+/* Status Indicators */
+.webcam-status {
+  @apply absolute top-2 left-2 flex gap-2;
+}
+
+.webcam-status-badge {
+  @apply bg-black/60 backdrop-blur-sm px-2 py-1 rounded-md text-xs flex items-center gap-1;
+}
+
+.webcam-status-mic-on {
+  @apply text-green-400;
+}
+
+.webcam-status-mic-off {
+  @apply text-red-400;
+}
+
+.webcam-status-gamemaster {
+  @apply text-yellow-400;
+}
+
+/* Turn Indicators */
+.webcam-turn-indicator {
+  @apply absolute top-2 right-2 bg-yellow-500/90 text-black px-2 py-1 rounded-md text-xs font-bold animate-pulse;
+}
+
+.webcam-next-indicator {
+  @apply absolute top-2 right-2 bg-purple-500/90 text-white px-2 py-1 rounded-md text-xs font-semibold;
+}
+
+/* ============================================
+   Control Buttons
+   ============================================ */
+
+.webcam-feed-controls {
+  @apply absolute top-2 right-2 flex gap-1;
+}
+
+.webcam-control-btn {
+  @apply bg-black/60 hover:bg-black/80 backdrop-blur-sm text-white p-1.5 rounded-md;
+  @apply transition-all duration-200 cursor-pointer;
+}
+
+.webcam-control-btn:hover {
+  @apply scale-110;
+}
+
+.webcam-control-btn-active {
+  @apply bg-green-600 hover:bg-green-700;
+}
+
+.webcam-control-btn-inactive {
+  @apply bg-red-600 hover:bg-red-700;
+}
+
+/* Voting Button */
+.webcam-vote-btn {
+  @apply absolute bottom-2 right-2 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md text-sm font-semibold;
+  @apply transition-all duration-200 cursor-pointer;
+  @apply flex items-center gap-1;
+}
+
+.webcam-vote-btn:hover {
+  @apply scale-105 shadow-lg;
+}
+
+.webcam-vote-btn-voted {
+  @apply bg-green-600 hover:bg-green-700;
+}
+
+.webcam-vote-btn-disabled {
+  @apply bg-gray-600 cursor-not-allowed opacity-50;
+}
+
+/* ============================================
+   Header Controls
+   ============================================ */
+
+.webcam-header-btn {
+  @apply bg-slate-700 hover:bg-slate-600 text-white p-2 rounded-lg;
+  @apply transition-all duration-200 cursor-pointer;
+}
+
+.webcam-header-btn:hover {
+  @apply scale-105;
+}
+
+.webcam-header-btn-active {
+  @apply bg-green-600 hover:bg-green-700;
+}
+
+.webcam-header-btn-compact {
+  @apply p-1.5;
+}
+
+/* ============================================
+   Settings Modal (Prepare Video Chat)
+   ============================================ */
+
+.webcam-modal-backdrop {
+  @apply fixed inset-0 bg-black/50 backdrop-blur-sm z-[9998];
+}
+
+.webcam-modal {
+  @apply fixed top-[5%] left-1/2 transform -translate-x-1/2;
+  @apply bg-slate-800/95 backdrop-blur-sm border border-slate-600/50 rounded-xl shadow-2xl;
+  @apply w-[90vw] max-w-[600px] max-h-[85vh] flex flex-col;
+  z-index: 2147483647;
+  position: fixed;
+  isolation: isolate;
+  pointer-events: auto;
+  transform: translate(-50%, 0px);
+}
+
+.webcam-modal-header {
+  @apply flex items-center justify-between p-6 border-b border-slate-600/50;
+  flex-shrink: 0;
+}
+
+.webcam-modal-title {
+  @apply text-lg font-semibold text-slate-200 flex items-center;
+}
+
+.webcam-modal-close {
+  @apply text-slate-400 hover:text-slate-200 transition-colors cursor-pointer;
+  @apply p-1 rounded-full hover:bg-slate-700/50;
+}
+
+.webcam-modal-body {
+  @apply p-6 flex-1 overflow-y-auto;
+}
+
+.webcam-modal-preview {
+  @apply p-6 border-b border-slate-600/50;
+  flex-shrink: 0;
+}
+
+.webcam-modal-preview-title {
+  @apply text-md font-medium text-slate-200 mb-3 flex items-center;
+}
+
+.webcam-modal-preview-container {
+  @apply flex justify-center;
+}
+
+.webcam-modal-preview-video-wrapper {
+  @apply relative bg-gray-900 rounded-xl overflow-hidden border-2 border-slate-600/50;
+  aspect-ratio: 16/9;
+  width: 320px;
+}
+
+.webcam-modal-preview-badge {
+  @apply absolute bottom-2 left-2 bg-blue-600/80 text-white px-2 py-1 rounded text-xs font-medium;
+}
+
+.webcam-modal-preview-info {
+  @apply mt-3 p-3 bg-blue-900/30 border border-blue-400/50 rounded-lg;
+}
+
+.webcam-modal-preview-info-text {
+  @apply text-blue-200 text-sm text-center;
+}
+
+.webcam-modal-footer {
+  @apply flex justify-end gap-3 p-6 border-t border-slate-600/50 flex-shrink-0;
+}
+
+.webcam-modal-tabs {
+  @apply flex border-b border-slate-600/50;
+}
+
+.webcam-modal-tab {
+  @apply flex items-center space-x-2 px-6 py-3 font-medium text-sm transition-colors cursor-pointer;
+  @apply border-b-2 border-transparent;
+}
+
+.webcam-modal-tab:hover {
+  @apply text-slate-200;
+}
+
+.webcam-modal-tab-active {
+  @apply text-blue-400 border-b-2 border-blue-400;
+}
+
+.webcam-modal-tab-inactive {
+  @apply text-slate-400 hover:text-slate-200;
+}
+
+.webcam-modal-button-primary {
+  @apply px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors;
+}
+
+.webcam-modal-button-secondary {
+  @apply px-6 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors;
+}
+
+/* ============================================
+   Settings Form Elements
+   ============================================ */
+
+.webcam-form-group {
+  @apply mb-4;
+}
+
+.webcam-form-label {
+  @apply text-sm text-slate-300 font-medium block mb-2;
+}
+
+.webcam-form-select {
+  @apply w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-slate-200;
+  @apply focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+}
+
+.webcam-form-input {
+  @apply w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-slate-200;
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+}
+
+.webcam-form-checkbox {
+  @apply w-4 h-4 text-blue-600 bg-slate-700 border-slate-600 rounded;
+  @apply focus:ring-blue-500 focus:ring-2;
+}
+
+.webcam-form-slider {
+  @apply w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer;
+}
+
+.webcam-form-slider::-webkit-slider-thumb {
+  @apply appearance-none w-4 h-4 bg-blue-500 rounded-full cursor-pointer;
+}
+
+.webcam-form-help {
+  @apply text-xs text-slate-400 mt-1;
+}
+
+/* ============================================
+   Device Preview
+   ============================================ */
+
+.webcam-preview {
+  @apply bg-slate-900 rounded-lg overflow-hidden border border-slate-700;
+  aspect-ratio: 16/9;
+}
+
+.webcam-preview-video {
+  @apply w-full h-full object-cover;
+}
+
+/* ============================================
+   Background Selection Grid
+   ============================================ */
+
+.webcam-background-grid {
+  @apply grid grid-cols-2 md:grid-cols-3 gap-3;
+}
+
+.webcam-background-option {
+  @apply relative cursor-pointer rounded-lg overflow-hidden border-2 border-transparent;
+  @apply hover:border-blue-500 transition-all duration-200;
+  aspect-ratio: 16/9;
+}
+
+.webcam-background-option-active {
+  @apply border-blue-500 ring-2 ring-blue-500;
+}
+
+.webcam-background-image {
+  @apply w-full h-full object-cover;
+}
+
+.webcam-background-label {
+  @apply absolute bottom-0 left-0 right-0 bg-black/70 text-white text-xs py-1 px-2 text-center;
+}
+
+/* ============================================
+   Avatar Selection Grid
+   ============================================ */
+
+.webcam-avatar-grid {
+  @apply grid grid-cols-3 md:grid-cols-4 gap-3;
+}
+
+.webcam-avatar-option {
+  @apply relative cursor-pointer rounded-lg overflow-hidden border-2 border-transparent;
+  @apply hover:border-blue-500 transition-all duration-200;
+  @apply bg-slate-700 p-3;
+  aspect-ratio: 1;
+}
+
+.webcam-avatar-option-active {
+  @apply border-blue-500 ring-2 ring-blue-500;
+}
+
+.webcam-avatar-icon {
+  @apply w-full h-full flex items-center justify-center text-slate-400;
+}
+
+.webcam-avatar-label {
+  @apply absolute bottom-0 left-0 right-0 bg-black/70 text-white text-xs py-1 px-2 text-center;
+}
+
+/* ============================================
+   Status Messages
+   ============================================ */
+
+.webcam-status-message {
+  @apply text-center py-8 text-slate-400;
+}
+
+.webcam-error-message {
+  @apply text-center py-4 px-4 bg-red-900/20 border border-red-500/50 rounded-lg text-red-400;
+}
+
+.webcam-warning-message {
+  @apply text-center py-4 px-4 bg-yellow-900/20 border border-yellow-500/50 rounded-lg text-yellow-400;
+}
+
+.webcam-info-message {
+  @apply text-center py-4 px-4 bg-blue-900/20 border border-blue-500/50 rounded-lg text-blue-400;
+}
+
+.webcam-info-box {
+  @apply bg-blue-900/30 border border-blue-400/50 rounded-lg p-3;
+}
+
+.webcam-info-box-text {
+  @apply text-blue-200 text-sm;
+}
+
+.webcam-success-box {
+  @apply bg-green-900/30 border border-green-400/50 rounded-lg p-3;
+}
+
+.webcam-success-box-text {
+  @apply text-green-200 text-sm;
+}
+
+/* ============================================
+   Loading States
+   ============================================ */
+
+.webcam-loading {
+  @apply flex items-center justify-center gap-2 text-slate-400;
+}
+
+.webcam-spinner {
+  @apply w-5 h-5 border-2 border-slate-600 border-t-blue-500 rounded-full animate-spin;
+}
+
+/* ============================================
+   Popout Window Styles
+   ============================================ */
+
+.webcam-popout {
+  @apply fixed inset-0 bg-slate-900 z-50;
+}
+
+.webcam-popout-header {
+  @apply bg-slate-800 border-b border-slate-700 p-4 flex items-center justify-between;
+}
+
+.webcam-popout-body {
+  @apply p-4 h-[calc(100vh-64px)] overflow-auto;
+}
+
+/* ============================================
+   Media Controls (Simple Component)
+   ============================================ */
+
+.media-controls {
+  @apply space-y-3;
+}
+
+.media-controls-buttons {
+  @apply flex items-center space-x-2 bg-slate-800/80 backdrop-blur-sm rounded-xl p-3 border border-slate-600/50;
+}
+
+.media-control-btn {
+  @apply px-3 py-2 rounded-lg font-medium transition-all duration-200 cursor-pointer;
+  @apply flex items-center space-x-1;
+}
+
+.media-control-btn-success {
+  @apply bg-green-600 hover:bg-green-700 text-white;
+}
+
+.media-control-btn-secondary {
+  @apply bg-slate-700 hover:bg-slate-600 text-slate-200;
+}
+
+.media-control-btn-warning {
+  @apply bg-yellow-600 hover:bg-yellow-700 text-white;
+}
+
+.media-control-btn:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+.media-control-status {
+  @apply flex items-center space-x-1 text-green-400 text-xs;
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.webcam-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.webcam-slide-in {
+  animation: slideIn 0.3s ease-in-out;
+}
+
+/* ============================================
+   Responsive Utilities
+   ============================================ */
+
+@media (max-width: 768px) {
+  .webcam-modal {
+    @apply max-w-full m-4;
+  }
+
+  .webcam-grid {
+    @apply grid-cols-1;
+  }
+
+  .webcam-background-grid {
+    @apply grid-cols-2;
+  }
+
+  .webcam-avatar-grid {
+    @apply grid-cols-3;
+  }
+}
+
+/* ============================================
+   Dark Mode Support (if needed)
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+  /* Already dark by default */
+}
+
+@media (prefers-color-scheme: light) {
+  /* Optionally add light mode overrides */
+  .webcam-container {
+    @apply bg-white/95 border-gray-300;
+  }
+
+  .webcam-feed {
+    @apply bg-gray-100 border-gray-300;
+  }
+
+  /* Add more light mode overrides as needed */
+}
+
+/* ============================================
+   Print Styles (hide video chat when printing)
+   ============================================ */
+
+@media print {
+  .webcam-display,
+  .webcam-container,
+  .media-controls {
+    display: none !important;
+  }
+}

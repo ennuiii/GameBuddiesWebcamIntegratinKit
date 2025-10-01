@@ -1,0 +1,258 @@
+DDF WEBCAM INTEGRATION KIT - FILE STRUCTURE
+===========================================
+
+This kit contains all files needed to integrate DDF's webcam system into your game.
+
+📁 FOLDER STRUCTURE
+-------------------
+
+webcam-integration-kit/
+│
+├── src/                                    # Source code files
+│   │
+│   ├── contexts/
+│   │   └── WebRTCContext.tsx              # Core WebRTC management (1661 lines)
+│   │       ├── State management for streams, connections, devices
+│   │       ├── WebRTC peer connection logic
+│   │       ├── Socket.io signaling integration
+│   │       ├── Virtual background integration
+│   │       ├── Audio processor integration
+│   │       └── Face avatar integration
+│   │
+│   ├── components/
+│   │   ├── WebcamDisplay.tsx              # Main UI component (1887 lines)
+│   │   │   ├── Video feed grid layout
+│   │   │   ├── Device settings modal
+│   │   │   ├── Virtual background controls
+│   │   │   ├── Audio processing controls
+│   │   │   ├── Avatar selection UI
+│   │   │   ├── Mobile responsive design
+│   │   │   ├── Popout window support
+│   │   │   └── Player status indicators
+│   │   │
+│   │   └── MediaControls.tsx              # Simple controls (326 lines)
+│   │       ├── Microphone toggle
+│   │       ├── Background music control
+│   │       ├── Device selection
+│   │       └── Settings panel
+│   │
+│   ├── services/
+│   │   ├── virtualBackgroundService.ts    # AI background replacement (750 lines)
+│   │   │   ├── MediaPipe image segmentation
+│   │   │   ├── Background blur effect
+│   │   │   ├── Custom background images
+│   │   │   ├── Edge smoothing algorithms
+│   │   │   ├── Temporal smoothing
+│   │   │   ├── Hair refinement
+│   │   │   └── MediaStreamTrackProcessor integration
+│   │   │
+│   │   ├── audioProcessor.ts              # Audio enhancement (324 lines)
+│   │   │   ├── Web Audio API processing
+│   │   │   ├── Noise suppression (Krisp-like)
+│   │   │   ├── Echo cancellation
+│   │   │   ├── Auto gain control
+│   │   │   ├── Spectral gating
+│   │   │   └── Dynamic compression
+│   │   │
+│   │   └── faceAvatarService.ts           # 3D avatar tracking (535 lines)
+│   │       ├── MediaPipe face landmarker
+│   │       ├── Three.js 3D rendering
+│   │       ├── GLB model loading
+│   │       ├── Facial transformation matrix
+│   │       ├── ARKit blendshapes
+│   │       ├── Expression tracking
+│   │       └── Geometric avatar fallbacks
+│   │
+│   ├── utils/
+│   │   └── translations.ts                # i18n helper
+│   │       ├── Translation key lookup
+│   │       ├── Language fallback
+│   │       └── Helper functions
+│   │
+│   └── locales/
+│       ├── en.ts                          # English translations
+│       │   └── All UI strings in English
+│       │
+│       └── de.ts                          # German translations
+│           └── All UI strings in German
+│
+├── public/                                # Public assets
+│   │
+│   ├── wasm/                              # MediaPipe WASM files (~15MB)
+│   │   ├── vision_wasm_internal.js       # WASM loader (SIMD)
+│   │   ├── vision_wasm_internal.wasm     # MediaPipe vision runtime (SIMD)
+│   │   ├── vision_wasm_nosimd_internal.js  # WASM loader (no SIMD)
+│   │   └── vision_wasm_nosimd_internal.wasm  # MediaPipe vision runtime (no SIMD)
+│   │
+│   └── models/                            # AI Models (~7MB)
+│       ├── selfie_segmenter.tflite       # Background segmentation model (~1MB)
+│       │   └── Used by virtualBackgroundService
+│       │
+│       ├── face_landmarker.task          # Face tracking model (~6MB)
+│       │   └── Used by faceAvatarService
+│       │
+│       └── raccoon_head.glb              # Example 3D avatar (~500KB)
+│           └── Used by faceAvatarService (optional)
+│
+├── package.json                           # NPM dependencies list
+├── README.md                              # Installation guide
+├── INSTALL.md                             # Installation checklist
+└── FILE_STRUCTURE.txt                     # This file
+
+
+📦 DEPENDENCIES
+---------------
+
+Required (Core Features):
+- socket.io-client       # WebRTC signaling
+- lucide-react          # UI icons
+- react                 # UI framework
+- zustand               # State management
+
+Optional (AI Features):
+- @mediapipe/tasks-vision  # AI models (virtual background, avatars)
+- three                    # 3D rendering (avatars)
+- @types/three            # TypeScript definitions
+
+
+🔧 INTEGRATION POINTS
+---------------------
+
+Your Game Must Provide:
+
+1. Zustand Store (or equivalent) with:
+   - socket: Socket.io connection
+   - userId: Current user ID
+   - roomCode: Current room code
+   - userRole: 'player' | 'gamemaster'
+   - room: Room state object
+   - language: Current language
+   - hasVoted: Voting state
+   - submitVote(): Vote function
+   - updateMediaState(): Media state function
+
+2. Socket.io Server Handlers:
+   - webrtc:enable-video
+   - webrtc:disable-video
+   - webrtc:offer
+   - webrtc:answer
+   - webrtc:ice-candidate
+   - Cleanup on disconnect
+
+3. CSS Styling:
+   - Tailwind CSS (or equivalent classes)
+
+
+💾 FILE SIZES
+-------------
+
+Total Package: ~50MB
+
+Breakdown:
+- Source Code:      ~500KB (7 files)
+- WASM Files:       ~15MB (4 files)
+- AI Models:        ~7MB (2 files)
+- Avatar Model:     ~500KB (1 file)
+- Documentation:    ~100KB (3 files)
+
+
+🎯 FEATURE MATRIX
+-----------------
+
+What Each File Enables:
+
+WebRTCContext.tsx:
+✓ Video/audio streams
+✓ WebRTC peer connections
+✓ Device management
+✓ Stream control
+
+WebcamDisplay.tsx:
+✓ Video grid UI
+✓ Settings modal
+✓ Device selection
+✓ Feature controls
+✓ Mobile responsive
+
+virtualBackgroundService.ts + WASM + segmenter.tflite:
+✓ Background replacement
+✓ Background blur
+✓ Edge smoothing
+
+audioProcessor.ts:
+✓ Noise suppression
+✓ Echo cancellation
+✓ Auto gain control
+
+faceAvatarService.ts + WASM + landmarker.task + GLB:
+✓ 3D avatar overlay
+✓ Facial tracking
+✓ Expression mapping
+
+
+🚀 QUICK START
+---------------
+
+1. Copy to your project:
+   cp -r webcam-integration-kit/src/* your-game/client/src/
+   cp -r webcam-integration-kit/public/* your-game/client/public/
+
+2. Install dependencies:
+   npm install socket.io-client lucide-react zustand
+
+3. For AI features:
+   npm install @mediapipe/tasks-vision three
+
+4. Wrap your app:
+   <WebRTCProvider>
+     <YourGame />
+   </WebRTCProvider>
+
+5. Add component:
+   <WebcamDisplay />
+
+6. Set up signaling server (see README.md)
+
+7. Test in browser!
+
+
+📚 DOCUMENTATION
+----------------
+
+- README.md: Installation guide
+- INSTALL.md: Installation checklist
+- ../client/docs/WebcamIntegrationGuide.md: Comprehensive guide
+- Source code: Inline documentation
+
+
+🌐 BROWSER SUPPORT
+------------------
+
+Feature                 Chrome/Edge  Firefox  Safari
+Basic Video/Audio       ✓ 94+        ✓ 90+    ✓ 15.4+
+Virtual Backgrounds     ✓ 94+        ✗        ✗
+Audio Processing        ✓            ✓        ✓
+Face Avatars           ✓ 94+        ✗        ✗
+
+Note: Virtual backgrounds and avatars require MediaStreamTrackProcessor API
+
+
+🔒 SECURITY NOTES
+------------------
+
+- Use HTTPS in production (required for getUserMedia)
+- Never expose TURN credentials in client code
+- Validate peer IDs on server
+- Rate limit signaling events
+- Sanitize user inputs
+
+
+📄 LICENSE
+----------
+
+MIT License - Free to use in your projects
+
+
+---
+
+For detailed documentation, see README.md and the comprehensive guide.

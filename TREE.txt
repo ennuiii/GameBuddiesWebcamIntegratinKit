@@ -1,0 +1,33 @@
+C:\Users\Basti\DDF\webcam-integration-kit
+└── FILE_STRUCTURE.txt
+└── INSTALL.md
+└── package.json
+└── public
+|   └── models
+|   |   └── face_landmarker.task
+|   |   └── raccoon_head.glb
+|   |   └── selfie_segmenter.tflite
+|   └── wasm
+|   |   └── vision_wasm_internal.js
+|   |   └── vision_wasm_internal.wasm
+|   |   └── vision_wasm_nosimd_internal.js
+|   |   └── vision_wasm_nosimd_internal.wasm
+└── QUICK_REFERENCE.md
+└── README.md
+└── src
+|   └── components
+|   |   └── MediaControls.tsx
+|   |   └── WebcamDisplay.tsx
+|   └── contexts
+|   |   └── WebRTCContext.tsx
+|   └── locales
+|   |   └── de.ts
+|   |   └── en.ts
+|   └── services
+|   |   └── audioProcessor.ts
+|   |   └── faceAvatarService.ts
+|   |   └── virtualBackgroundService.ts
+|   └── utils
+|   |   └── translations.ts
+└── START_HERE.txt
+└── TREE.txt
