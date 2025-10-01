@@ -1340,7 +1340,13 @@ export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
       }
 
       console.log('[WebRTC] Creating new VirtualBackgroundService');
-      virtualBackgroundService.current = new VirtualBackgroundService(state.virtualBackground.config);
+      // Inject asset paths from WebcamConfig into service config
+      const bgConfigWithPaths = {
+        ...state.virtualBackground.config,
+        wasmPath: config.assetPaths?.wasmPath,
+        modelsPath: config.assetPaths?.modelsPath
+      };
+      virtualBackgroundService.current = new VirtualBackgroundService(bgConfigWithPaths);
       
       console.log('[WebRTC] Initializing virtual background service...');
       await virtualBackgroundService.current.initialize();
@@ -1580,7 +1586,13 @@ export const WebRTCProvider: React.FC<WebRTCProviderProps> = ({ children }) => {
       }
 
       console.log('[WebRTC] Creating new FaceAvatarService');
-      faceAvatarService.current = new FaceAvatarService(state.faceAvatar.config);
+      // Inject asset paths from WebcamConfig into service config
+      const avatarConfigWithPaths = {
+        ...state.faceAvatar.config,
+        wasmPath: config.assetPaths?.wasmPath,
+        modelsPath: config.assetPaths?.modelsPath
+      };
+      faceAvatarService.current = new FaceAvatarService(avatarConfigWithPaths);
       
       console.log('[WebRTC] Initializing face avatar service...');
       await faceAvatarService.current.initialize();

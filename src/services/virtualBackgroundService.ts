@@ -50,6 +50,10 @@ export interface VirtualBackgroundConfig {
   adaptiveThreshold?: boolean; // Use adaptive thresholding
   hairRefinement?: boolean; // Special processing for hair edges
   minContourArea?: number; // Minimum area for person detection
+
+  // Asset paths (for NPM package support)
+  wasmPath?: string; // Path to WASM files directory (default: '/wasm')
+  modelsPath?: string; // Path to models directory (default: '/models')
 }
 
 export const DEFAULT_BACKGROUNDS = [
@@ -93,18 +97,22 @@ export class VirtualBackgroundService {
   public async initialize(): Promise<void> {
     console.log('[Service] ========== INITIALIZING VIRTUAL BACKGROUND SERVICE ==========');
     console.log('[Service] Step 1: Initializing MediaPipe...');
-    
+
+    const wasmPath = this.config.wasmPath || '/wasm';
+    const modelsPath = this.config.modelsPath || '/models';
+
     try {
       // Initialize MediaPipe FilesetResolver
-      console.log('[Service] Creating FilesetResolver...');
-      const vision = await FilesetResolver.forVisionTasks('./wasm');
+      console.log(`[Service] Creating FilesetResolver with WASM path: ${wasmPath}`);
+      const vision = await FilesetResolver.forVisionTasks(wasmPath);
       console.log('[Service] FilesetResolver created successfully');
-      
+
       // Create ImageSegmenter
-      console.log('[Service] Creating ImageSegmenter...');
+      const modelPath = `${modelsPath}/selfie_segmenter.tflite`;
+      console.log(`[Service] Creating ImageSegmenter with model: ${modelPath}`);
       this.imageSegmenter = await ImageSegmenter.createFromOptions(vision, {
         baseOptions: {
-          modelAssetPath: './models/selfie_segmenter.tflite',
+          modelAssetPath: modelPath,
           delegate: 'GPU' // Use GPU acceleration if available
         },
         runningMode: 'IMAGE',

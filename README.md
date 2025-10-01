@@ -1,330 +1,271 @@
-# DDF Webcam Integration Kit
+# @gamebuddies/webcam-kit
 
 > **Complete WebRTC Video Chat System with AI Enhancements**
 >
-> Ready-to-use package extracted from DDF Quiz Game
+> Professional webcam integration for React games with virtual backgrounds, face avatars, and noise suppression.
+
+[![npm version](https://img.shields.io/npm/v/@gamebuddies/webcam-kit.svg)](https://www.npmjs.com/package/@gamebuddies/webcam-kit)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ---
 
-## What's Included
+## ✨ Features
 
-This kit contains everything you need to add professional video chat to your game:
-
-✅ **WebRTC Video/Audio** - Real-time P2P communication
-✅ **AI Virtual Backgrounds** - MediaPipe-powered background replacement
-✅ **Noise Suppression** - Krisp-like audio enhancement
-✅ **3D Face Avatars** - Real-time facial tracking with Three.js
-✅ **Device Management** - Camera/microphone selection
-✅ **Mobile Support** - Responsive design
-✅ **Complete UI** - Pre-built components with full functionality
-
----
-
-## 📦 Package Contents
-
-```
-webcam-integration-kit/
-├── src/
-│   ├── contexts/
-│   │   └── WebRTCContext.tsx          # Core WebRTC management (1661 lines)
-│   ├── components/
-│   │   ├── WebcamDisplay.tsx          # Main UI component (1887 lines)
-│   │   └── MediaControls.tsx          # Audio/video controls (326 lines)
-│   ├── services/
-│   │   ├── virtualBackgroundService.ts # AI background replacement (750 lines)
-│   │   ├── audioProcessor.ts          # Audio enhancement (324 lines)
-│   │   └── faceAvatarService.ts       # 3D avatar tracking (535 lines)
-│   ├── utils/
-│   │   └── translations.ts            # i18n helper
-│   └── locales/
-│       ├── en.ts                      # English translations
-│       └── de.ts                      # German translations
-├── public/
-│   ├── wasm/                          # MediaPipe WASM files (4 files)
-│   │   ├── vision_wasm_internal.js
-│   │   ├── vision_wasm_internal.wasm
-│   │   ├── vision_wasm_nosimd_internal.js
-│   │   └── vision_wasm_nosimd_internal.wasm
-│   └── models/                        # AI Models (3 files)
-│       ├── selfie_segmenter.tflite   # For virtual backgrounds (~1MB)
-│       ├── face_landmarker.task      # For face avatars (~6MB)
-│       └── raccoon_head.glb          # Example 3D avatar (~500KB)
-├── package.json                       # Dependencies list
-└── README.md                          # This file
-```
-
-**Total Package Size**: ~50MB (mostly AI models)
+- 🎥 **WebRTC Video/Audio** - Real-time P2P communication
+- 🎨 **AI Virtual Backgrounds** - MediaPipe-powered background replacement
+- 🔇 **Noise Suppression** - Krisp-like audio enhancement
+- 👤 **3D Face Avatars** - Real-time facial tracking with Three.js
+- 🎛️ **Device Management** - Camera/microphone selection
+- 📱 **Mobile Support** - Fully responsive design
+- 🧩 **Adapter Pattern** - Works with Zustand, Redux, Context API
+- 🎨 **Customizable** - Tailwind CSS or plain CSS
 
 ---
 
-## 🚀 Quick Installation
-
-### Step 1: Copy Files to Your Project
+## 📦 Installation
 
 ```bash
-# Copy the entire kit into your project
-cp -r webcam-integration-kit/src/* your-game/client/src/
-cp -r webcam-integration-kit/public/* your-game/client/public/
+npm install @gamebuddies/webcam-kit
 ```
 
-### Step 2: Install Dependencies
+### Install Peer Dependencies
 
 ```bash
-cd your-game/client
-npm install @mediapipe/tasks-vision socket.io-client three lucide-react
-npm install -D @types/three
+npm install react react-dom socket.io-client
 ```
 
-### Step 3: Set Up State Management
+### Setup Assets (Required for AI Features)
 
-The kit requires a Zustand store with socket.io. Add this to your store:
+Copy WASM files and AI models to your public folder:
+
+```bash
+npm run setup-assets
+```
+
+Or manually run:
+
+```bash
+npx @gamebuddies/webcam-kit setup-assets
+```
+
+This copies ~22MB of WASM files and AI models to `public/wasm` and `public/models`.
+
+---
+
+## 🚀 Quick Start
+
+### 1. Choose Your State Management
+
+#### Option A: Zustand (Recommended)
 
 ```typescript
-// stores/unifiedStore.ts (or your state management)
-import { create } from 'zustand'
-import io from 'socket.io-client'
+import { create } from 'zustand';
+import io from 'socket.io-client';
 
-const socket = io('http://localhost:3001', {
-  transports: ['websocket'],
-  reconnection: true
-})
-
-export const useUnifiedStore = create((set) => ({
-  socket: socket,
-  userId: null,
-  roomCode: null,
-  userRole: 'player', // or 'gamemaster'
-  room: null,
-  language: 'en',
-  hasVoted: false,
-
-  // Add methods as needed
-  submitVote: (playerId) => {
-    // Your voting logic
-  },
-  updateMediaState: (isMicOn) => {
-    // Your media state logic
-  }
-}))
-
-export default useUnifiedStore
+const useGameStore = create((set) => ({
+  socket: io('http://localhost:3001'),
+  userId: 'player-123',
+  roomCode: 'GAME-001',
+  // ... your game state
+}));
 ```
 
-### Step 4: Wrap Your App with WebRTC Provider
+#### Option B: React Context
+
+```typescript
+import { createContext } from 'react';
+import io from 'socket.io-client';
+
+const GameContext = createContext({
+  socket: io('http://localhost:3001'),
+  userId: 'player-123',
+  roomCode: 'GAME-001',
+  // ... your game state
+});
+```
+
+### 2. Create an Adapter
+
+```typescript
+import { createZustandAdapter } from '@gamebuddies/webcam-kit';
+// or: import { createContextAdapter } from '@gamebuddies/webcam-kit';
+
+const webcamConfig = createZustandAdapter(useGameStore);
+// or: const webcamConfig = createContextAdapter(gameContextValue);
+```
+
+### 3. Wrap Your App
 
 ```tsx
-// App.tsx
-import { WebRTCProvider } from './contexts/WebRTCContext'
+import { WebRTCProvider, WebcamDisplay } from '@gamebuddies/webcam-kit';
+import '@gamebuddies/webcam-kit/dist/style.css';
 
 function App() {
   return (
-    <WebRTCProvider>
-      <YourGameComponent />
+    <WebRTCProvider config={webcamConfig}>
+      <YourGame />
+      <WebcamDisplay />
     </WebRTCProvider>
-  )
+  );
 }
 ```
 
-### Step 5: Add Webcam Component
+### 4. Setup Signaling Server
 
-```tsx
-// YourGameComponent.tsx
-import WebcamDisplay from './components/WebcamDisplay'
+```javascript
+// server/index.js
+const io = require('socket.io')(3001);
 
-function YourGameComponent() {
-  return (
-    <div className="game-layout">
-      <div className="game-content">
-        {/* Your game UI */}
-      </div>
+io.on('connection', (socket) => {
+  socket.on('join-room', ({ roomCode, userId }) => {
+    socket.join(roomCode);
+    socket.to(roomCode).emit('user-connected', userId);
+  });
 
-      <div className="video-sidebar">
-        <WebcamDisplay />
-      </div>
-    </div>
-  )
-}
+  socket.on('webrtc:offer', ({ to, from, offer }) => {
+    io.to(to).emit('webrtc:offer', { from, offer });
+  });
+
+  socket.on('webrtc:answer', ({ to, from, answer }) => {
+    io.to(to).emit('webrtc:answer', { from, answer });
+  });
+
+  socket.on('webrtc:ice-candidate', ({ to, from, candidate }) => {
+    io.to(to).emit('webrtc:ice-candidate', { from, candidate });
+  });
+});
 ```
 
-### Step 6: Set Up Signaling Server
+---
 
-Add these socket handlers to your server:
+## 🎨 Customization
+
+### Configure Asset Paths
 
 ```typescript
-// server/socketHandlers.ts
-io.on('connection', (socket) => {
-  const videoEnabledPeers = new Map()
-  const peerConnectionTypes = new Map()
-
-  socket.on('webrtc:enable-video', ({ roomCode, peerId, connectionType }) => {
-    // Add peer to video list
-    if (!videoEnabledPeers.has(roomCode)) {
-      videoEnabledPeers.set(roomCode, new Set())
-    }
-    videoEnabledPeers.get(roomCode).add(peerId)
-    peerConnectionTypes.set(peerId, connectionType)
-
-    // Notify all peers
-    const peers = Array.from(videoEnabledPeers.get(roomCode) || [])
-    const types = Object.fromEntries(
-      peers.map(id => [id, peerConnectionTypes.get(id) || 'has-camera'])
-    )
-
-    io.to(roomCode).emit('webrtc:video-enabled-peers', { peers, peerConnectionTypes: types })
-    socket.to(roomCode).emit('webrtc:peer-enabled-video', { peerId, connectionType })
-  })
-
-  socket.on('webrtc:disable-video', ({ roomCode, peerId }) => {
-    videoEnabledPeers.get(roomCode)?.delete(peerId)
-    socket.to(roomCode).emit('webrtc:peer-disabled-video', { peerId })
-  })
-
-  socket.on('webrtc:offer', ({ toPeerId, offer }) => {
-    io.to(toPeerId).emit('webrtc:offer', { fromPeerId: socket.id, offer })
-  })
-
-  socket.on('webrtc:answer', ({ toPeerId, answer }) => {
-    io.to(toPeerId).emit('webrtc:answer', { fromPeerId: socket.id, answer })
-  })
-
-  socket.on('webrtc:ice-candidate', ({ toPeerId, candidate }) => {
-    io.to(toPeerId).emit('webrtc:ice-candidate', { fromPeerId: socket.id, candidate })
-  })
-
-  socket.on('disconnect', () => {
-    videoEnabledPeers.forEach((peers, roomCode) => {
-      if (peers.has(socket.id)) {
-        peers.delete(socket.id)
-        io.to(roomCode).emit('webrtc:peer-left', { peerId: socket.id })
-      }
-    })
-  })
-})
+const webcamConfig = createZustandAdapter(useGameStore, {
+  assetPaths: {
+    wasmPath: '/custom/wasm',
+    modelsPath: '/custom/models'
+  }
+});
 ```
 
-**That's it!** 🎉 You now have full video chat working.
-
----
-
-## 🎨 Styling
-
-The components use Tailwind CSS classes. Make sure Tailwind is configured in your project:
-
-```bash
-npm install -D tailwindcss postcss autoprefixer
-npx tailwindcss init -p
-```
-
-Or add equivalent CSS for the classes used in the components.
-
----
-
-## ⚙️ Configuration
-
-### Minimal Setup (Video Only)
-
-If you only want basic video chat without AI features, you can skip installing:
-- MediaPipe packages
-- WASM files
-- Model files
-- Avatar files
-
-And remove the AI service imports from `WebRTCContext.tsx`.
-
-### Full Setup (All Features)
-
-To enable all features, ensure:
-1. All dependencies are installed
-2. WASM files are in `public/wasm/`
-3. Model files are in `public/models/`
-4. Avatar GLB files are in `public/models/`
-
-### Custom Avatars
-
-Add your own 3D avatars:
-1. Create GLB file with morph targets for ARKit blendshapes
-2. Place in `public/models/your_avatar.glb`
-3. Update avatar selection in settings modal
-
----
-
-## 🎮 Usage Examples
-
-### Basic Usage
+### Use Plain CSS (No Tailwind)
 
 ```tsx
-import { useWebRTC } from './contexts/WebRTCContext'
+import '@gamebuddies/webcam-kit/dist/webcam-plain.css';
+```
 
-function GameLobby() {
-  const { enableVideoChat, isVideoEnabled } = useWebRTC()
+### Custom Styling
 
+```typescript
+const webcamConfig = createZustandAdapter(useGameStore, {
+  containerClassName: 'my-custom-webcam-container',
+  compactMode: true,
+  maxVideoFeeds: 4
+});
+```
+
+---
+
+## 🔌 API Reference
+
+### Components
+
+#### `WebRTCProvider`
+Main context provider for webcam functionality.
+
+```tsx
+<WebRTCProvider config={webcamConfig}>
+  {children}
+</WebRTCProvider>
+```
+
+#### `WebcamDisplay`
+Full-featured video chat UI component.
+
+```tsx
+<WebcamDisplay />
+```
+
+#### `MediaControls`
+Simple audio/video controls (optional).
+
+```tsx
+<MediaControls />
+```
+
+### Adapters
+
+#### `createZustandAdapter(useStore, options?)`
+Creates config for Zustand-based apps.
+
+#### `createReduxAdapter(store, options?)`
+Creates config for Redux-based apps.
+
+#### `createContextAdapter(contextValue, options?)`
+Creates config for Context API-based apps.
+
+### Hooks
+
+#### `useWebRTC()`
+Access WebRTC state and controls.
+
+```tsx
+const { localStream, remoteStreams, toggleWebcam, toggleMicrophone } = useWebRTC();
+```
+
+---
+
+## 📖 Examples
+
+### Full Example with Game Features
+
+```tsx
+import { create } from 'zustand';
+import io from 'socket.io-client';
+import {
+  WebRTCProvider,
+  WebcamDisplay,
+  createZustandAdapter
+} from '@gamebuddies/webcam-kit';
+import '@gamebuddies/webcam-kit/dist/style.css';
+
+// Your game store
+const useGameStore = create((set) => ({
+  socket: io('http://localhost:3001'),
+  userId: 'player-123',
+  roomCode: 'GAME-001',
+  userRole: 'player',
+  players: [
+    { id: 'player-123', name: 'Alice', lives: 3 },
+    { id: 'player-456', name: 'Bob', lives: 2 }
+  ],
+  currentTurnPlayer: 'player-123'
+}));
+
+// Create adapter with game features
+const webcamConfig = createZustandAdapter(useGameStore, {
+  showLives: true,
+  getLivesForPlayer: (playerId) => {
+    const player = useGameStore.getState().players.find(p => p.id === playerId);
+    return player?.lives || 0;
+  },
+  showTurnIndicators: true,
+  getCurrentTurnPlayer: () => useGameStore.getState().currentTurnPlayer
+});
+
+function Game() {
   return (
-    <button onClick={enableVideoChat}>
-      {isVideoEnabled ? 'Video Chat Active' : 'Join Video Chat'}
-    </button>
-  )
+    <WebRTCProvider config={webcamConfig}>
+      <div className="game-container">
+        <YourGameBoard />
+        <WebcamDisplay />
+      </div>
+    </WebRTCProvider>
+  );
 }
-```
-
-### Access Streams
-
-```tsx
-const { localStream, remoteStreams } = useWebRTC()
-
-// Local video
-<video ref={ref => ref && (ref.srcObject = localStream)} />
-
-// Remote videos
-{Array.from(remoteStreams.entries()).map(([peerId, stream]) => (
-  <video key={peerId} ref={ref => ref && (ref.srcObject = stream)} />
-))}
-```
-
-### Control Devices
-
-```tsx
-const {
-  toggleWebcam,
-  toggleMicrophone,
-  isWebcamActive,
-  isMicrophoneMuted
-} = useWebRTC()
-
-<button onClick={toggleWebcam}>
-  {isWebcamActive ? 'Turn Off Camera' : 'Turn On Camera'}
-</button>
-
-<button onClick={toggleMicrophone}>
-  {isMicrophoneMuted ? 'Unmute' : 'Mute'}
-</button>
-```
-
-### Enable AI Features
-
-```tsx
-const {
-  enableVirtualBackground,
-  enableAudioProcessor,
-  enableFaceAvatar,
-  virtualBackground,
-  audioProcessor,
-  faceAvatar
-} = useWebRTC()
-
-// Virtual background
-<button onClick={enableVirtualBackground}>
-  Enable Virtual Background
-</button>
-
-// Audio enhancement
-<button onClick={enableAudioProcessor}>
-  Enable Noise Suppression
-</button>
-
-// Face avatar (hidden by default - type "face" in settings)
-<button onClick={enableFaceAvatar}>
-  Enable 3D Avatar
-</button>
 ```
 
 ---
@@ -333,107 +274,29 @@ const {
 
 | Feature | Chrome/Edge | Firefox | Safari |
 |---------|-------------|---------|--------|
-| Video/Audio | ✅ 94+ | ✅ 90+ | ✅ 15.4+ |
+| Basic Video/Audio | ✅ 94+ | ✅ 90+ | ✅ 15.4+ |
 | Virtual Backgrounds | ✅ 94+ | ❌ | ❌ |
-| Audio Processing | ✅ | ✅ | ✅ |
+| Noise Suppression | ✅ | ✅ | ✅ |
 | Face Avatars | ✅ 94+ | ❌ | ❌ |
 
-**Note**: Virtual backgrounds and avatars require `MediaStreamTrackProcessor` API (Chrome/Edge only)
-
----
-
-## 🐛 Common Issues
-
-### Camera/Mic Not Working
-
-1. Check browser permissions
-2. Use HTTPS (required for getUserMedia)
-3. Test with simple getUserMedia call
-
-### Peer Connection Fails
-
-1. Check socket.io connection
-2. Verify signaling events
-3. Use TURN server for production
-
-### Virtual Background Not Working
-
-1. Verify WASM files are accessible
-2. Check browser compatibility (Chrome/Edge only)
-3. Ensure models are downloaded
-
-### High CPU Usage
-
-1. Lower video resolution
-2. Disable AI features on low-end devices
-3. Use blur instead of image backgrounds
-
----
-
-## 📚 Documentation
-
-For detailed documentation, see:
-- [WebcamIntegrationGuide.md](../client/docs/WebcamIntegrationGuide.md) - Comprehensive guide
-- [WebRTCContext.tsx](src/contexts/WebRTCContext.tsx) - Inline documentation
-- [WebcamDisplay.tsx](src/components/WebcamDisplay.tsx) - Component documentation
-
----
-
-## 🔒 Security Notes
-
-- Never expose TURN credentials in client code
-- Validate peer IDs on server
-- Rate limit signaling events
-- Use HTTPS in production
-- Sanitize user inputs
-
----
-
-## 🎯 Features Roadmap
-
-Current features (✅):
-- [x] WebRTC video/audio
-- [x] Virtual backgrounds
-- [x] Noise suppression
-- [x] 3D face avatars
-- [x] Device management
-- [x] Mobile support
-
-Potential additions (from DDF):
-- [ ] Screen sharing
-- [ ] Recording
-- [ ] Custom overlays
-- [ ] Reactions/emojis
-- [ ] Voice activity detection
+> **Note**: Virtual backgrounds and avatars require MediaStreamTrackProcessor API (Chrome/Edge only)
 
 ---
 
 ## 📄 License
 
-MIT License - Feel free to use in your projects
+MIT © GameBuddies Team
 
 ---
 
-## 💬 Support
+## 🤝 Contributing
 
-For questions or issues:
-1. Check the comprehensive guide in `docs/WebcamIntegrationGuide.md`
-2. Review source code comments
-3. Test in Chrome DevTools console
-4. Check `chrome://webrtc-internals` for WebRTC debugging
+Contributions welcome! Please check our [issues](https://github.com/ennuiii/GameBuddiesWebcamIntegratinKit/issues) or submit a PR.
 
 ---
 
-## 🙏 Credits
+## 🔗 Links
 
-Built for **DDF Quiz Game** using:
-- WebRTC for P2P communication
-- MediaPipe for AI features
-- Three.js for 3D rendering
-- Socket.io for signaling
-
----
-
-**Ready to add video chat to your game? Copy, paste, and play! 🚀**
-
-*Last updated: 2025*
+- [GitHub Repository](https://github.com/ennuiii/GameBuddiesWebcamIntegratinKit)
+- [npm Package](https://www.npmjs.com/package/@gamebuddies/webcam-kit)
+- [Report Issues](https://github.com/ennuiii/GameBuddiesWebcamIntegratinKit/issues)

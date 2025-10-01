@@ -39,6 +39,10 @@ export interface FaceAvatarConfig {
   enableBlendshapes: boolean;
   expressionIntensity: number;
   customModelUrl?: string; // For loading custom GLB models
+
+  // Asset paths (for NPM package support)
+  wasmPath?: string; // Path to WASM files directory (default: '/wasm')
+  modelsPath?: string; // Path to models directory (default: '/models')
 }
 
 export const DEFAULT_AVATAR_CONFIG: FaceAvatarConfig = {
@@ -89,14 +93,20 @@ export class FaceAvatarService {
 
   public async initialize(): Promise<void> {
     console.log('[FaceAvatar] Initializing Face Avatar Service...');
-    
+
+    const wasmPath = this.config.wasmPath || '/wasm';
+    const modelsPath = this.config.modelsPath || '/models';
+
     try {
       // Initialize MediaPipe
-      const vision = await FilesetResolver.forVisionTasks('./wasm');
-      
+      console.log(`[FaceAvatar] Loading WASM from: ${wasmPath}`);
+      const vision = await FilesetResolver.forVisionTasks(wasmPath);
+
+      const modelPath = `${modelsPath}/face_landmarker.task`;
+      console.log(`[FaceAvatar] Loading face landmarker from: ${modelPath}`);
       this.faceLandmarker = await FaceLandmarker.createFromOptions(vision, {
         baseOptions: {
-          modelAssetPath: './models/face_landmarker.task',
+          modelAssetPath: modelPath,
           delegate: 'GPU'
         },
         runningMode: 'VIDEO',
@@ -160,27 +170,29 @@ export class FaceAvatarService {
 
   private async loadGLTFAvatar(): Promise<void> {
     if (!this.gltfLoader || !this.scene) return;
-    
+
+    const modelsPath = this.config.modelsPath || '/models';
+
     // Determine model URL based on avatar type
     let modelUrl: string;
     switch (this.config.avatarType) {
       case 'raccoon':
-        modelUrl = './models/raccoon_head.glb';
+        modelUrl = `${modelsPath}/raccoon_head.glb`;
         break;
       case 'robot':
-        modelUrl = './models/robot_head.glb';
+        modelUrl = `${modelsPath}/robot_head.glb`;
         break;
       case 'alien':
-        modelUrl = './models/alien_head.glb';
+        modelUrl = `${modelsPath}/alien_head.glb`;
         break;
       case 'cat':
-        modelUrl = './models/cat_head.glb';
+        modelUrl = `${modelsPath}/cat_head.glb`;
         break;
       case 'custom':
-        modelUrl = this.config.customModelUrl || './models/raccoon_head.glb';
+        modelUrl = this.config.customModelUrl || `${modelsPath}/raccoon_head.glb`;
         break;
       default:
-        modelUrl = './models/raccoon_head.glb';
+        modelUrl = `${modelsPath}/raccoon_head.glb`;
     }
     
     console.log('[FaceAvatar] Loading model:', modelUrl);

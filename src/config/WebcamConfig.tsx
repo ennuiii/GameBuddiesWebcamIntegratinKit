@@ -153,6 +153,28 @@ export interface WebcamConfig {
   getGameState?: () => string;
 
   // ========================================
+  // OPTIONAL: Asset Configuration
+  // ========================================
+
+  /**
+   * Configure paths to WASM files and AI models
+   * Used by virtual background and face avatar features
+   */
+  assetPaths?: {
+    /**
+     * Path to MediaPipe WASM files directory
+     * @default '/wasm'
+     */
+    wasmPath?: string;
+
+    /**
+     * Path to AI models directory
+     * @default '/models'
+     */
+    modelsPath?: string;
+  };
+
+  // ========================================
   // OPTIONAL: UI Customization
   // ========================================
 
@@ -211,6 +233,12 @@ export function createWebcamConfig(config: Partial<WebcamConfig> & Required<Pick
     getCurrentTurnPlayer: config.getCurrentTurnPlayer || (() => null),
     getNextTurnPlayer: config.getNextTurnPlayer || (() => null),
     getGameState: config.getGameState || (() => 'playing'),
+
+    // Asset paths with defaults
+    assetPaths: {
+      wasmPath: config.assetPaths?.wasmPath || '/wasm',
+      modelsPath: config.assetPaths?.modelsPath || '/models',
+    },
 
     // UI customization
     containerClassName: config.containerClassName || '',
